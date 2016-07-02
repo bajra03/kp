@@ -71,7 +71,29 @@
             </div>
         </div>
     </nav>
+    @if (Session::has('flash_notification.message'))
+    <div class="alert alert-{{ Session::get('flash_notification.level') }}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 
+        {{ Session::get('flash_notification.message') }}
+    </div>
+    @endif
+
+    @if (count($errors) > 0)
+        <!-- Form Error List -->
+        <div class="alert alert-danger">
+            <strong>Whoops! Something went wrong!</strong>
+
+            <br><br>
+
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
     @yield('content')
 
     <!-- JavaScripts -->
