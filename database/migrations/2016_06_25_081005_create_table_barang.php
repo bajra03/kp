@@ -12,12 +12,34 @@ class CreateTableBarang extends Migration
      */
     public function up()
     {
-        Schema::create('barang', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nama_barang', 60);
-            $table->integer('stok');
-            $table->string('kategori');
+            $table->string('item_name', 60);
+            $table->integer('stock');
+            $table->integer('price');
+            $table->enum('category', ['beverage', 'food']);
+            $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::create('log_items', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('item_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->string('activity');
+            $table->integer('price');
+            $table->softDeletes();
+            $table->timestamps();
+
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('items')
+                ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
@@ -28,6 +50,7 @@ class CreateTableBarang extends Migration
      */
     public function down()
     {
-        Schema::drop('barang');
+        Schema::drop('log_items');
+        Schema::drop('items');
     }
 }
