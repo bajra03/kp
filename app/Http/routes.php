@@ -11,16 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'HomeController@checksession');
+
+Route::auth();
+
+Route::group(['middleware' => 'auth'], function() {
+	Route::get('/home', 'HomeController@index');
+
+	Route::resource('items', 'ItemController', ['except' => 'show']);
+	Route::resource('users', 'UserController', ['except' => 'show']);
 });
-
-Route::auth();
-
-Route::get('/home', 'HomeController@index');
-
-Route::auth();
-
-Route::get('/home', 'HomeController@index');
-
-Route::resource('barang', 'BarangController');
